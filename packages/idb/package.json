@@ -1,6 +1,6 @@
 {
   "name": "@thinkives/idb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "thinkive indexedDB",
   "main": "lib/index.js",
   "scripts": {

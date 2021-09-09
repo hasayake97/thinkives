@@ -33,7 +33,8 @@
 
 version 在对 数据库 新增 表时候，需要更新。
 
-```javascript
+
+```js
 open(name: String, version: Number)
 
 const idb = new Idb()
@@ -55,7 +56,8 @@ primaryKey: 新增时若不设置主键，将默认设置为 { autoIncrement: tr
 
 对表进行的 add/put/delete/get 操作都将会依靠 主键 来完成。
 
-```javascript
+
+```js
 table(name: String, options: Object)
 
 const idb = new Idb()
@@ -74,6 +76,7 @@ idb.table('parent', 'id').exec()
 
 若 table 时未指定主键，则新增数据类型 any。
 
+
 ```js
 const idb = new Idb()
 
@@ -86,6 +89,7 @@ idb.add([
 
 ```
 
+
 add 在主键重复时，将会抛出错误。因此建议使用 put 进行新增数据，除非明确要新增的数据在表中已有的数据中不存在。
 
 ### put
@@ -94,6 +98,7 @@ add 在主键重复时，将会抛出错误。因此建议使用 put 进行新�
 |  params| type | require | 说明 |
 |  ----  |----  |  ----   | ---- |
 | data | Any or Array/Object | true | 要修改的新数据 |
+
 
 ```js
 const idb = new Idb()
@@ -107,6 +112,7 @@ idb.put([
 
 ```
 
+
 若 table 时传入了指定主键，则新增修改的数据必须包含主键属性。此时数据结构为 Object/Object[]。
 
 若修改的主键不存在，则新增该数据。
@@ -119,6 +125,7 @@ idb.put([
 |  params| type | require | 说明 |
 |  ----  |----  |  ----   | ---- |
 | data | primaryKey or primaryKey[] | true | 主键/主键组成的数组 |
+
 
 ```js
 const idb = new Idb()
@@ -139,6 +146,7 @@ idb.delete([1, 2, 3]).exec()
 |  ----  |----  |  ----   | ---- |
 | data | primaryKey or primaryKey[] | true | 主键/主键组成的数组 |
 
+
 ```js
 const idb = new Idb()
 
@@ -146,6 +154,7 @@ idb.get(1).exec()
 
 idb.get([1, 2, 3]).exec()
 ```
+
 
 若 table 时传入了指定主键，则新增的数据必须包含主键属性。此时数据结构为 Object/Object[]。
 
@@ -157,6 +166,7 @@ idb.get([1, 2, 3]).exec()
 |  params| type | require | 说明 |
 |  ----  |----  |  ----   | ---- |
 | - | - | - | - |
+
 
 ```js
 const idb = new Idb()
@@ -171,11 +181,13 @@ idb.getAll().exec()
 |  ----  |----  |  ----   | ---- |
 | - | - | - | - |
 
+
 ```js
 const idb = new Idb()
 
 idb.clear().exec()
 ```
+
 
 ### exec
 执行该次链式调用的所有命令。
@@ -189,17 +201,21 @@ callback(result): 链式调用执行结束后的回调函数，本次链式调�
 
 abnormalCb(error): 链式调用执行异常后的回调函数，本次链式调用异常中断前的最后一个节点的结果将会传入 result。
 
+
 ```js
 const idb = new Idb()
 
 idb.xxx().exec()
 ```
 
+
 所有的命令操作，都需要调用 exec 方能执行。
 
 ## Example
 
 ### 初始化
+
+
 ```js
 const idb = new Idb()
 
@@ -225,11 +241,14 @@ idb
 
 ```
 
+
 每次对表进行操作时，无需重复 open + table。
 
 这是因为在初始化 open + table 时，内部已经关联了此实例操作的数据库 + 表。
 
 只要确保在后续的操作时，实例内部已经关联即可。
+
+
 
 ```js
 const idb = new Idb()
@@ -239,7 +258,9 @@ idb.open('idb', 1).table('table-1', 'id').exec(() => {
 })
 ```
 
+
 当然，也可以重新执行 open + table 以更新实例内部的关联 库 + 表
+
 
 ```js
 const idb = new Idb()
@@ -253,6 +274,8 @@ idb.open('idb-2', 1).table('table-2', 'id').exec()
 open 与 table 并非一定要在一起执行，单独执行亦可。
 
 由于对库表的操作都属于异步行为，因此若要确保拿到最新状态的实例。可以这样执行。
+
+
 ```js
 const idb = new Idb()
 
@@ -276,5 +299,6 @@ idb
   .add([{id: 1, text: 'hello'}, {id: 2, text: 'world'}])
   .exec()
 ```
+
 
 只实现基本的封装，便于调用。
