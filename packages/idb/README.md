@@ -2,7 +2,7 @@
 
 > Date: 2021-09-08
 >
-> Author: hasayake.luo
+> Author: Luo
 
 基于 IndexedDB 的二次封装，以便客户端本地快捷操作数据库。
 
