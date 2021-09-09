@@ -116,10 +116,11 @@ export const createHandler = function (name, primaryKey) {
 const cursorAll = function() {
   return new Promise((resolve, reject) => {
     const all = []
+    const tName = this.getTName()
     const request = this
       .getDB()
-      .transaction(this.getTName())
-      .objectStore(this.getTName())
+      .transaction(tName)
+      .objectStore(tName)
     const openCursor = request.openCursor()
 
     openCursor.onsuccess = ev => {
@@ -146,9 +147,10 @@ export const getAllHandler = function() {
 
 export const clearHandler = function() {
   const handler = () => new Promise((resolve, reject) => {
+    const tName = this.getTName()
     const request = this.getDB()
-      .transaction([this.getTName()], 'readwrite')
-      .objectStore(this.getTName())
+      .transaction([tName], 'readwrite')
+      .objectStore(tName)
 
     const { transaction } = request.clear()
 
