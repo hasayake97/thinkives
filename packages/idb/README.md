@@ -73,6 +73,7 @@ idb.table('parent', 'id').exec()
 若 table 时传入了指定主键，则新增的数据必须包含主键属性。此时数据结构为 Object/Object[]。
 
 若 table 时未指定主键，则新增数据类型 any。
+
 ```js
 const idb = new Idb()
 
@@ -193,8 +194,8 @@ const idb = new Idb()
 
 idb.xxx().exec()
 ```
-所有的命令操作，都需要调用 exec 方能执行。
 
+所有的命令操作，都需要调用 exec 方能执行。
 
 ## Example
 
