@@ -1,0 +1,15 @@
+{
+  "name": "@thinkives/idb",
+  "version": "1.0.0",
+  "description": "thinkive indexedDB",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "thinkive",
+    "indexedDB"
+  ],
+  "author": "luojun1@thinkive.com",
+  "license": "ISC"
+}
