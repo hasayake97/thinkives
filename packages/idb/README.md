@@ -194,12 +194,12 @@ idb.clear().exec()
 
 |  params| type | require | 说明 |
 |  ----  |----  |  ----   | ---- |
-| callback(result) |  | false | 链式调用执行结束后的回调函数 |
-| abnormalCb(error) |  | false | 链式调用执行异常中断后的回调函数 |
+| callback(result) | Function | false | 链式调用执行结束后的回调函数 |
+| abnormalCb(error) | Function | false | 链式调用执行异常中断后的回调函数 |
 
 callback(result): 链式调用执行结束后的回调函数，本次链式调用最后一个节点的结果将会传入 result。
 
-abnormalCb(error): 链式调用执行异常后的回调函数，本次链式调用异常中断前的最后一个节点的结果将会传入 result。
+abnormalCb(error): 链式调用执行异常后的回调函数，本次链式调用异常中断前的最后一个节点的结果将会传入 error。
 
 
 ```js
