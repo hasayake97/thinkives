@@ -1,14 +1,8 @@
-<!--
- * @file idb
- * @Author luojun1@thinkive.com
- * @Date 2021-09-08 16:53:33
--->
-
 # idb
 
 > Date: 2021-09-08
 >
-> Author: luojun1@thinkive.com
+> Author: hasayake.luo
 
 基于 IndexedDB 的二次封装，以便客户端本地快捷操作数据库。
 
@@ -21,7 +15,7 @@
 | table  | 连接/新建 表 |
 | add    | 对 表 进行新增操作|
 | put    | 对 表 进行更新操作|
-| delete    | 对 表 进行删除操作|
+| delete | 对 表 进行删除操作|
 | get    | 对 表 进行查询操作|
 | getAll | 查询当前 表 的所有数据|
 | clear  | 清空当前 表 的所有数据|
