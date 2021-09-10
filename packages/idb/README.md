@@ -1,7 +1,10 @@
 # idb
 
+>
 > Date: 2021-09-08
+>
 > Author: luo
+>
 
 基于 IndexedDB 的二次封装，以便客户端本地快捷操作数据库。
 
