@@ -1,13 +1,14 @@
 # idb
 
 > Date: 2021-09-08
->
-> Author: Luo
+> Author: luo
 
 基于 IndexedDB 的二次封装，以便客户端本地快捷操作数据库。
 
 本封装使用 **函数式编程** 范式，共提供以下 API。
 支持链式调用，每次调用都需 exec 执行。
+
+支持对 IndexedDB 的批量增删改查。
 
 |  API   | 解释  |
 |  ----  | ----  |
@@ -29,7 +30,7 @@
 |  params| type | require | 说明 |
 |  ----  |----  |  ----   | ---- |
 | name | String |true | 数据库名 |
-| version| Number |true | 数据库版本 |
+| version | Number |true | 数据库版本 |
 
 version 在对 数据库 新增 表时候，需要更新。
 
@@ -66,7 +67,7 @@ idb.table('parent', 'id').exec()
 ```
 
 ### add
-对指定表进行 新增 操作。
+对指定表进行 新增/批量新增 操作。
 
 |  params| type | require | 说明 |
 |  ----  |----  |  ----   | ---- |
@@ -93,7 +94,7 @@ idb.add([
 add 在主键重复时，将会抛出错误。因此建议使用 put 进行新增数据，除非明确要新增的数据在表中已有的数据中不存在。
 
 ### put
-对指定表进行 修改 操作。
+对指定表进行 修改/批量修改 操作。
 
 |  params| type | require | 说明 |
 |  ----  |----  |  ----   | ---- |
@@ -120,7 +121,7 @@ idb.put([
 若 table 时未指定主键，则新增数据类型 any。
 
 ### delete
-对指定表进行 删除 操作。
+对指定表进行 删除/批量删除 操作。
 
 |  params| type | require | 说明 |
 |  ----  |----  |  ----   | ---- |
@@ -134,10 +135,10 @@ idb.delete(1).exec()
 
 idb.delete([1, 2, 3]).exec()
 ```
-传入单个 主键或主键组成的数组皆可。
+传入单个 主键或主键组成的数组 皆可。
 
 ### get
-对指定表进行 查询 操作。
+对指定表进行 查询/批量查询 操作。
 
 |  params| type | require | 说明 |
 |  ----  |----  |  ----   | ---- |
@@ -152,7 +153,7 @@ idb.get(1).exec()
 idb.get([1, 2, 3]).exec()
 ```
 
-传入单个 主键或主键组成的数组皆可。
+传入单个 主键或主键组成的数组 皆可。
 
 ### getAll
 对指定表进行 查询全部数据 操作。
@@ -179,6 +180,8 @@ idb.getAll().exec()
 ```js
 const idb = new Idb()
 
+// ...something idb 内部已关联了某个库表
+
 idb.clear().exec()
 ```
 
@@ -199,7 +202,10 @@ abnormalCb(error): 链式调用执行异常后的回调函数，本次链式调�
 ```js
 const idb = new Idb()
 
-idb.xxx().exec()
+idb.xxx().exec(
+  result => {},
+  error => {}
+)
 ```
 
 
@@ -238,7 +244,7 @@ idb
 
 每次对表进行操作时，无需重复 open + table。
 
-这是因为在初始化 open + table 时，内部已经关联了此实例操作的数据库 + 表。
+在初始化 open + table 时，内部已关联了此实例操作的数据库 + 表。
 
 只要确保在后续的操作时，实例内部已经关联即可。
 
@@ -293,5 +299,3 @@ idb
   .add([{id: 1, text: 'hello'}, {id: 2, text: 'world'}])
   .exec()
 ```
-
-只实现基本的封装，便于调用。
