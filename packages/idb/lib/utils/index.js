@@ -5,11 +5,13 @@
  */
 
 export const isSupportIdb = () => {
-  if (!window.indexedDB) {
+  const idb = indexedDB || window.indexedDB || global.indexedDB || self.indexedDB
+
+  if (!idb) {
     throw new SyntaxError('INFO: 当前环境不支持 IndexedDB 操作!')
   }
 
-  return window.indexedDB
+  return idb
 }
 
 
