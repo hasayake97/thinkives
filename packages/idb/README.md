@@ -27,6 +27,26 @@
 
 ## API
 
+
+### 安装
+
+
+```js
+// npm
+npm i install @thinkives/idb -S
+
+// yarn
+yarn add @thinkives/idb
+```
+
+
+### 使用
+
+```js
+import Idb from '@thinkives/idb'
+
+const idb = new Idb()
+```
 ### open
 打开数据库，若 name 不存在，则新建数据库。
 
@@ -39,8 +59,6 @@ version 在对 数据库 新增 表时候，需要更新。
 
 
 ```js
-open(name: String, version: Number)
-
 const idb = new Idb()
 
 idb.open('parent', 1).exec()
@@ -62,8 +80,6 @@ primaryKey: 新增时若不设置主键，将默认设置为 { autoIncrement: tr
 
 
 ```js
-table(name: String, options: Object)
-
 const idb = new Idb()
 
 idb.table('parent', 'id').exec()
