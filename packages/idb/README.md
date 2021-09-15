@@ -33,7 +33,7 @@
 
 ```js
 // npm
-npm i install @thinkives/idb -S
+npm i @thinkives/idb -S
 
 // yarn
 yarn add @thinkives/idb
