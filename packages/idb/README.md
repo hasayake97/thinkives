@@ -5,6 +5,8 @@
 >
 > Author: luo
 >
+> Version: 1.1.2
+>
 
 基于 IndexedDB 的二次封装，以便客户端本地快捷操作数据库。
 
@@ -202,6 +204,24 @@ const idb = new Idb()
 // ...something idb 内部已关联了某个库表
 
 idb.clear().exec()
+```
+
+### batchCreateTable
+对指定数据库批量创建表。
+|  params| type | require | 说明 |
+|  ----  |----  |  ----   | ---- |
+| list | Array: {name: String, keyPath: String}[] | true | 由表名，主键对象组成的数组 |
+
+```js
+const idb = new Idb()
+
+idb.open('batch', 1).batchCreateTable([
+  { name: 'user-1', keyPath: 'id' },
+  { name: 'user-2', keyPath: 'id' }
+]).exec(() => {
+  // 因为多张表创建时，实例内部不会主动关联 table。需手动声明指定。
+  idb.table('user-1', 'id').put({id: 10, text: 'hello'}).exec()
+})
 ```
 
 

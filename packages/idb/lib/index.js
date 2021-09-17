@@ -10,7 +10,8 @@ import {
   createHandler,
   execHandler,
   getAllHandler,
-  clearHandler
+  clearHandler,
+  batchCreateTableHandler
 } from './utils/handler'
 
 
@@ -63,6 +64,11 @@ class Idb {
             result: ev.target.result,
             mode: 'open-upgradeneeded'
           })
+
+        }
+
+        request.onblocked = () => {
+          console.warn('IDB-INFO-ERROR: 数据库已被锁定!')
         }
 
         request.onsuccess = () => {
@@ -75,7 +81,12 @@ class Idb {
           })
         }
 
-        request.onerror = ev => reject(ev)
+        request.onerror = ev => reject({
+          statu: 'error',
+          result: ev,
+          mode: 'open-error'
+        })
+
       } else {
         reject({
           mode: 'open',
@@ -85,7 +96,10 @@ class Idb {
       }
     })
 
-    this.registers(handler)
+    this.registers({
+      action: 'open',
+      handler
+    })
 
     return this
   }
@@ -112,6 +126,25 @@ class Idb {
 
   clear() {
     return clearHandler.call(this)
+  }
+
+  close() {
+    const handler = resolve => {
+      this.getDB().close()
+
+      setTimeout(resolve, 100)
+    }
+
+    this.registers({
+      action: 'close',
+      handler
+    })
+
+    return this
+  }
+
+  batchCreateTable(configs) {
+    return batchCreateTableHandler.call(this, configs)
   }
 
   getAll() {

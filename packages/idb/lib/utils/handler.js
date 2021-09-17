@@ -6,6 +6,10 @@
 
 import { isType } from './index'
 
+const getKeyPath = keyPath => {
+  return keyPath ? { keyPath } : { autoIncrement: true }
+}
+
 const multipleHandler = (r, data, mode) => {
   return new Promise((resolve, reject) => {
     let request = null
@@ -73,9 +77,16 @@ const core = function(mode, data, tableName) {
 export const handler = function(mode, data, tableName) {
   const handler = () => core.call(this, mode, data, tableName)
 
-  this.registers(handler)
+  this.registers({
+    action: mode,
+    handler
+  })
 
   return this
+}
+
+const existOsName = function(name) {
+  return this.getDB().objectStoreNames.contains(name)
 }
 
 /**
@@ -88,12 +99,12 @@ export const createHandler = function (name, primaryKey) {
   const _tableName = name || this.getTName()
 
   const handler = () => new Promise((resolve, reject) => {
-    if (this.getDB().objectStoreNames.contains(_tableName)) {
+    if (existOsName.call(this, _tableName)) {
       this.tName = _tableName
 
       resolve()
     } else {
-      const _keyPath = primaryKey ? { keyPath: primaryKey } : { autoIncrement: true }
+      const _keyPath = getKeyPath(primaryKey)
 
       const { transaction } = this.getDB().createObjectStore(_tableName, _keyPath)
 
@@ -108,7 +119,10 @@ export const createHandler = function (name, primaryKey) {
     }
   })
 
-  this.registers(handler)
+  this.registers({
+    action: 'table',
+    handler
+  })
 
   return this
 }
@@ -140,7 +154,10 @@ const cursorAll = function() {
 }
 
 export const getAllHandler = function() {
-  this.registers(cursorAll.bind(this))
+  this.registers({
+    action: 'getAll',
+    handler: cursorAll.bind(this)
+  })
 
   return this
 }
@@ -167,7 +184,41 @@ export const clearHandler = function() {
     })
   })
 
-  this.registers(handler)
+  this.registers({
+    action: 'clear',
+    handler
+  })
+
+  return this
+}
+
+/**
+ * @description 批量创建表
+ * @param {*} configs
+ * @return {*}
+ */
+export const batchCreateTableHandler = function(configs) {
+  const handler = () => new Promise((resolve, reject) => {
+    const db = this.getDB()
+    const batchCreateList = configs.filter(item => !existOsName.call(this, item.name))
+
+    if (batchCreateList.length) {
+      batchCreateList.forEach(item => {
+        const { transaction } = db.createObjectStore(item.name, getKeyPath(item.keyPath))
+
+        transaction.oncomplete = resolve
+
+        transaction.onabort = () => reject(new Error(`IDB-ERROR-CREATE: 新建数据库 ${item.name} 失败!`))
+      })
+    } else {
+      resolve()
+    }
+  })
+
+  this.registers({
+    action: 'batchCreate',
+    handler
+  })
 
   return this
 }
@@ -187,7 +238,7 @@ export const execHandler = function(cb, abnormal) {
       return
     }
 
-    t()
+    t.handler()
       .then(res => main(res))
       .catch((error) => {
         this.tasks = []
