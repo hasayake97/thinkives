@@ -199,19 +199,27 @@ export const clearHandler = function() {
  */
 export const batchCreateTableHandler = function(configs) {
   const handler = () => new Promise((resolve, reject) => {
-    const db = this.getDB()
-    const batchCreateList = configs.filter(item => !existOsName.call(this, item.name))
+    if (isType(configs, 'Array')) {
+      const db = this.getDB()
+      const batchCreateList = configs.filter(item => !existOsName.call(this, item.name))
 
-    if (batchCreateList.length) {
-      batchCreateList.forEach(item => {
-        const { transaction } = db.createObjectStore(item.name, getKeyPath(item.keyPath))
+      if (batchCreateList.length) {
+        batchCreateList.forEach(item => {
+          const { transaction } = db.createObjectStore(item.name, getKeyPath(item.keyPath))
 
-        transaction.oncomplete = resolve
+          transaction.oncomplete = resolve
 
-        transaction.onabort = () => reject(new Error(`IDB-ERROR-CREATE: 新建数据库 ${item.name} 失败!`))
-      })
+          transaction.onabort = () => reject(new Error(`IDB-ERROR-BATCH-CREATE: 新建数据库 ${item.name} 失败!`))
+        })
+      } else {
+        resolve()
+      }
     } else {
-      resolve()
+      reject({
+        mode: 'batch-create',
+        statu: 'error',
+        result: new Error('IDB-ERROR-OPEN: 批量创建时参数期望是一个数组!')
+      })
     }
   })
 
