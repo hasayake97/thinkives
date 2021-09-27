@@ -1,0 +1,22 @@
+{
+  "name": "@thinkives/utils",
+  "version": "1.0.4",
+  "description": "thinkives utils",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hasayake97/thinkives.git"
+  },
+  "keywords": [
+    "thinkives"
+  ],
+  "author": "thinkive developers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hasayake97/thinkives/issues"
+  },
+  "homepage": "https://github.com/hasayake97/thinkives#readme"
+}
