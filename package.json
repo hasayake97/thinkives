@@ -1,6 +1,6 @@
 {
   "name": "@thinkives/utils",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "thinkives utils",
   "main": "index.js",
   "scripts": {
